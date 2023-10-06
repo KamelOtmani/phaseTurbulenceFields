@@ -1,0 +1,3 @@
+phaseTurbulenceFields.C
+
+LIB = $(FOAM_USER_LIBBIN)/libphaseTurbulenceFields
