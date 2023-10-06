@@ -3,6 +3,8 @@
 a multiphase capable version of the OpenFOAM turbulenceFields function object
 developed and tested for OFv2306
 
+NOTE : this is really dirty and put together fast and little consideration for code quality was made when implementing this. fell free if anyone wants to improve i would be happy to accept PRs !
+
 ## Example
 
 add this to your `controlDict`
@@ -24,3 +26,8 @@ add this to your `controlDict`
 ```
 
 the fields are written as `turbulenceProperties:R.water` in this example.
+
+## TODOs:
+- add a way to calculate directly the rsm of the velocity
+- cleanup the enums and unify the control flow
+- 
