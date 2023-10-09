@@ -198,79 +198,81 @@ bool Foam::functionObjects::phaseTurbulenceFields::execute()
     //! multiphase models are virtually all compressible models
     const auto& model = obr_.lookupObject<turbulenceModel>(IOobject::groupName("turbulenceProperties", phaseName_));
 
-        for (const word& f : fieldSet_)
+    for (const word& f : fieldSet_)
+    {
+        switch (compressibleFieldNames_[f])
         {
-            switch (compressibleFieldNames_[f])
+            // TODO: add a way to calculate the rsm fluctuations directly UPrime (or the variance UPrime2)
+            // const volScalarField uPrime(sqrt((2.0/3.0)*model.k()));
+            case cfK:
             {
-                // TODO: add a way to calculate the rsm fluctuations directly UPrime (or the variance UPrime2)
-                // const volScalarField uPrime(sqrt((2.0/3.0)*model.k()));
-                case cfK:
-                {
-                    processField<scalar>(f, model.k());
-                    break;
-                }
-                case cfEpsilon:
-                {
-                    processField<scalar>(f, model.epsilon());
-                    break;
-                }
-                case cfOmega:
-                {
-                    processField<scalar>(f, model.omega());
-                    break;
-                }
-                case cfNuTilda:
-                {
-                    processField<scalar>(f, nuTilda(model));
-                    break;
-                }
-                case cfMut:
-                {
-                    processField<scalar>(f, model.mut());
-                    break;
-                }
-                case cfMuEff:
-                {
-                    processField<scalar>(f, model.muEff());
-                    break;
-                }
-                case cfAlphat:
-                {
-                    // processField<scalar>(f, model.alphat());
-                    break;
-                }
-                case cfAlphaEff:
-                {
-                    // processField<scalar>(f, model.alphaEff());
-                    break;
-                }
-                case cfR:
-                {
-                    processField<symmTensor>(f, model.R());
-                    break;
-                }
-                case cfDevRhoReff:
-                {
-                    // processField<symmTensor>(f, model.devRhoReff());
-                    break;
-                }
-                case cfL:
-                {
-                    processField<scalar>(f, L(model));
-                    break;
-                }
-                case cfI:
-                {
-                    processField<scalar>(f, I(model));
-                    break;
-                }
-                default:
-                {
-                    FatalErrorInFunction
-                        << "Invalid field selection" << abort(FatalError);
-                }
+                processField<scalar>(f, model.k());
+                break;
             }
-    return true;
+            case cfEpsilon:
+            {
+                processField<scalar>(f, model.epsilon());
+                break;
+            }
+            case cfOmega:
+            {
+                processField<scalar>(f, model.omega());
+                break;
+            }
+            case cfNuTilda:
+            {
+                processField<scalar>(f, nuTilda(model));
+                break;
+            }
+            case cfMut:
+            {
+                processField<scalar>(f, model.mut());
+                break;
+            }
+            case cfMuEff:
+            {
+                processField<scalar>(f, model.muEff());
+                break;
+            }
+            case cfAlphat:
+            {
+                // processField<scalar>(f, model.alphat());
+                break;
+            }
+            case cfAlphaEff:
+            {
+                // processField<scalar>(f, model.alphaEff());
+                break;
+            }
+            case cfR:
+            {
+                processField<symmTensor>(f, model.R());
+                break;
+            }
+            case cfDevRhoReff:
+            {
+                // processField<symmTensor>(f, model.devRhoReff());
+                break;
+            }
+            case cfL:
+            {
+                processField<scalar>(f, L(model));
+                break;
+            }
+            case cfI:
+            {
+                processField<scalar>(f, I(model));
+                break;
+            }
+            default:
+            {
+                FatalErrorInFunction
+                    << "Invalid field selection" << abort(FatalError);
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 
