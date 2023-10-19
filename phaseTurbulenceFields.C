@@ -270,9 +270,8 @@ bool Foam::functionObjects::phaseTurbulenceFields::execute()
                     << "Invalid field selection" << abort(FatalError);
             }
         }
-        return true;
     }
-    return false;
+    return true;
 }
 
 
